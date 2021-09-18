@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Bunicorn.gg</title>
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+  <meta charset="utf-8">
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+  <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+  <script src="bundle.js"></script>
+</head>
+<body>
+
+<div style="transform-origin: center top 0px;" id="app">
+  <v-app data-app="true" class="theme--light" id="inspire">
+    <v-main class="grey lighten-3" data-booted="true" style="padding: 64px 0px 0px;">
+      <v-container>
+        <v-row>
+          <div class="col-sm-2 col-12"></div>
+          <div class="col-sm-8 col-12">
+            <v-row>
+              <v-col cols="2">
+                <img src="logo.png" style="width: 100%">
+              </v-col>
+              <v-col cols="9">
+                <v-form v-on:submit.prevent="onSubmit">
+                  <v-text-field solo v-model="address" placeholder="Bunicorn address"></v-text-field>
+                </v-form>
+              </v-col>
+            </v-row>
+          </div>
+        </v-row>
+        <router-view></router-view>
+
+      </v-container>
+    </v-main>
+  </v-app>
+</div>
+
+<script>
+  const BattleLog = {
+    data: function () {
+      return {
+        items: []
+      }
+    },
+    template: '<v-container>\n' +
+      '        <v-row>\n' +
+      '          <div class="col-sm-2 col-12">\n' +
+      '          </div>\n' +
+      '          <div class="col-sm-8 col-12">\n' +
+      '            <div class="v-sheet theme--light rounded-lg" style="min-height: 70vh;">\n' +
+      '              <ul id="log">\n' +
+      '                <li v-for="item in items">\n' +
+      '                  {{ item.bunicornId }} | {{ item.enemyPower }} || {{ item.myPower }} || {{ item.reward }} ||\n' +
+      '                  <h1 v-if="item.myPower > item.enemyPower">win</h1>\n' +
+      '                  <h1 v-else>lose 😢</h1>\n' +
+      '                </li>\n' +
+      '              </ul>\n' +
+      '            </div>\n' +
+      '          </div>\n' +
+      '          <div class="col-sm-2 col-12">\n' +
+      '          </div>\n' +
+      '        </v-row>\n' +
+      '      </v-container>',
+    beforeEnter: (to, from, next) => {
+      console(to, from, next)
+      // /*
+      //  todo check if to === from
+      //  Warning!: location.reload()  completely destroy all vuejs stored states
+      //  */
+      //  window.location.reload()
+      return next()
+    },
+    watch: {
+      '$route'(to, from) {
+        this.items = [];
+        getLogs(this.$route.params.address).then(
+          logs => {
+            this.items = logs
+          }
+        );
+      }
+    },
+    created() {
+      console.log(this.$route.params);
+      getLogs(this.$route.params.address).then(
+        logs => {
+          this.items = logs
+        }
+      );
+    },
+  }
+  const routes = [
+    {path: '/:address', component: BattleLog},
+  ]
+  // const router = new VueRouter({
+  //   routes
+  // })
+  var app = new Vue({
+    vuetify: new Vuetify(),
+    router: new VueRouter({routes}),
+    data: {
+      address: '',
+      items: [],
+    },
+    methods: {
+      onSubmit: async function (event) {
+        this.$router.push('/' + this.address).catch(error => {
+          if (error.name !== "NavigationDuplicated") {
+            throw error;
+          } else {
+            window.location.reload()
+          }
+        })
+      }
+    },
+  }).$mount('#app')
+</script>
+
+</body>
+</html>
