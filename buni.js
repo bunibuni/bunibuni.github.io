@@ -2,7 +2,6 @@ const Web3 = require('web3');
 const url = 'https://bsc-dataseed.binance.org/';
 var web3 = new Web3(url);
 
-// var userAddress = '0x87ce48ff2904ede73988f5b392d4ad5885e812f6'
 const contractAddress = '0x6f9646a8e5bf4ac7b71d9bb0f21159112adb572d'
 
 
@@ -83,4 +82,3 @@ function getPastLog(address, topics, blockNumber, txHash) {
     }
   )
 }
-
