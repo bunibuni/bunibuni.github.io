@@ -11,21 +11,22 @@ const web3 = new Web3('https://bsc-dataseed1.binance.org:443')
 gameContract = new web3.eth.Contract(ABIs.gameABI, address.gameContract)
 bunicornContract = new web3.eth.Contract(ABIs.bunicornABI, address.bunicornContract)
 trainerContract = new web3.eth.Contract(ABIs.trainerABI, address.trainerContract)
-const bunicornImages = {"Fire":[["https://static.nft.bunicorn.exchange/bunicorns/fire_rabbit_Larvuny_1_450x600.png"],["https://static.nft.bunicorn.exchange/bunicorns/fire_rabbit_Larvany_2_450x600.png"],["https://static.nft.bunicorn.exchange/bunicorns/fire_rabbit_Larvesbuny_3_450x600.png"],["https://static.nft.bunicorn.exchange/bunicorns/rabbit_level_Larvucorn_4_450x600.png"],["https://static.nft.bunicorn.exchange/bunicorns/rabbit_level_Maslarcorn_5_450x600.png"]],"Earth":[["https://static.nft.bunicorn.exchange/bunicorns/earth_rabbit_Floru_1_450x600.png"],["https://static.nft.bunicorn.exchange/bunicorns/earth_rabbit_Floruny_2_450x600.png"],["https://static.nft.bunicorn.exchange/bunicorns/earth_rabbit_Florany_3_450x600.png","https://static.nft.bunicorn.exchange/bunicorns/earth_rabbit_Florany_3_2_450x600.png"],["https://static.nft.bunicorn.exchange/bunicorns/earth_rabbit_Floracorn_4_450x600.png","https://static.nft.bunicorn.exchange/bunicorns/earth_rabbit_Floracorn_4_2.png"],["https://static.nft.bunicorn.exchange/bunicorns/earth_rabbit_Floranicorn_5_450x600.png"]],"Water":[["https://static.nft.bunicorn.exchange/bunicorns/water_rabbit_Seabu_1_450x600.png"],["https://static.nft.bunicorn.exchange/bunicorns/water_rabbit_Seasabu_2_450x600.png"],["https://static.nft.bunicorn.exchange/bunicorns/water_rabbit_Oceabu_3_450x600.png"],["https://static.nft.bunicorn.exchange/bunicorns/water_rabbit_Depseabu_4_450x600.png"],["https://static.nft.bunicorn.exchange/bunicorns/water_rabbit_Abysbu_5_450x600.png"]],"Air":[["https://static.nft.bunicorn.exchange/bunicorns/Air rabbit_Sylny_1_450x600.png"],["https://static.nft.bunicorn.exchange/bunicorns/Air rabbit_Syluny_2_450x600.png"],["https://static.nft.bunicorn.exchange/bunicorns/Air rabbit_Sylveny_3_450x600.png"],["https://static.nft.bunicorn.exchange/bunicorns/Air rabbit_Sylveny_4_450x600.png"],["https://static.nft.bunicorn.exchange/bunicorns/Air rabbit_Sylveny_5_450x600.png"]]}
+const bunicornImages = {"FIRE":[["https://static.nft.bunicorn.exchange/bunicorns/fire_rabbit_Larvuny_1_450x600.png"],["https://static.nft.bunicorn.exchange/bunicorns/fire_rabbit_Larvany_2_450x600.png"],["https://static.nft.bunicorn.exchange/bunicorns/fire_rabbit_Larvesbuny_3_450x600.png"],["https://static.nft.bunicorn.exchange/bunicorns/rabbit_level_Larvucorn_4_450x600.png"],["https://static.nft.bunicorn.exchange/bunicorns/rabbit_level_Maslarcorn_5_450x600.png"]],"EARTH":[["https://static.nft.bunicorn.exchange/bunicorns/earth_rabbit_Floru_1_450x600.png"],["https://static.nft.bunicorn.exchange/bunicorns/earth_rabbit_Floruny_2_450x600.png"],["https://static.nft.bunicorn.exchange/bunicorns/earth_rabbit_Florany_3_450x600.png","https://static.nft.bunicorn.exchange/bunicorns/earth_rabbit_Florany_3_2_450x600.png"],["https://static.nft.bunicorn.exchange/bunicorns/earth_rabbit_Floracorn_4_450x600.png","https://static.nft.bunicorn.exchange/bunicorns/earth_rabbit_Floracorn_4_2.png"],["https://static.nft.bunicorn.exchange/bunicorns/earth_rabbit_Floranicorn_5_450x600.png"]],"WATER":[["https://static.nft.bunicorn.exchange/bunicorns/water_rabbit_Seabu_1_450x600.png"],["https://static.nft.bunicorn.exchange/bunicorns/water_rabbit_Seasabu_2_450x600.png"],["https://static.nft.bunicorn.exchange/bunicorns/water_rabbit_Oceabu_3_450x600.png"],["https://static.nft.bunicorn.exchange/bunicorns/water_rabbit_Depseabu_4_450x600.png"],["https://static.nft.bunicorn.exchange/bunicorns/water_rabbit_Abysbu_5_450x600.png"]],"AIR":[["https://static.nft.bunicorn.exchange/bunicorns/Air rabbit_Sylny_1_450x600.png"],["https://static.nft.bunicorn.exchange/bunicorns/Air rabbit_Syluny_2_450x600.png"],["https://static.nft.bunicorn.exchange/bunicorns/Air rabbit_Sylveny_3_450x600.png"],["https://static.nft.bunicorn.exchange/bunicorns/Air rabbit_Sylveny_4_450x600.png"],["https://static.nft.bunicorn.exchange/bunicorns/Air rabbit_Sylveny_5_450x600.png"]]};
 
-getBunicornImage = function(bunicorn){
-    return bunicornImages[bunicorn.element][parseInt(bunicorn.star)][0]
+getBunicornImage = function(element, star){
+    return bunicornImages[element][parseInt(star)][0]
 }
+
 function ElementString(e){
     switch (e) {
     case 0:
-        return "Fire";
+        return "FIRE";
     case 1:
-        return "Earth";
+        return "EARTH";
     case 3:
-        return "Water";
+        return "WATER";
     case 2:
-        return "Air";
+        return "AIR";
     case 4:
         return "NEUTRAL";
     default:
@@ -59,7 +60,8 @@ async function getBunicorn(bunicornId){
         level: bunicorn._level,
         'star': star,
         stamina: bunicornStamina,
-        bonusAttribute: bunicorn._bonusAttribute
+        bonusAttribute: bunicorn._bonusAttribute,
+        image: getBunicornImage(ElementString(element), star)
     }
 }
 
@@ -76,11 +78,12 @@ async function getTrainer(trainerId){
         level: trainerGet._level+1,
         exp: trainerGet._exp,
         power: trainerGet._power,
-        stamina: trainerStamina
+        stamina: trainerStamina,
+        image: getTrainerImage(ElementString(parseInt(trainerGet._element)), trainerId)
     }
 }
 
-GetTrainerImage = function (trainer){
+getTrainerImage = function (elementName, id){
     var ae = "https://static.nft.bunicorn.exchange/trainers/RESIZED_Black_robot_fire.png"
           , re = "https://static.nft.bunicorn.exchange/trainers/RESIZED_Female_trainer_02_fire.png"
           , ie = "https://static.nft.bunicorn.exchange/trainers/RESIZED_Female_trainer_04_fire.png"
@@ -116,7 +119,7 @@ GetTrainerImage = function (trainer){
           , je = [oe, fe, de, ue, le, pe]
           , Le = [me, he, ve, ye, ge, we]
           , Pe = [Te, ke, Ce, xe, Ie, Be];
-    return trainer ? "Earth" === trainer.elementName ? Le[trainer.id % Ne.length] : "Fire" === trainer.elementName ? Oe[trainer.id % Ne.length] : "Water" === trainer.elementName ? Pe[trainer.id % Ne.length] : "Air" === trainer.elementName ? je[trainer.id % Ne.length] : void 0 : null
+    return elementName && id ? "Earth" === elementName ? Le[id % Ne.length] : "Fire" === elementName ? Oe[id % Ne.length] : "Water" === elementName ? Pe[id % Ne.length] : "Air" === elementName ? je[id % Ne.length] : void 0 : null
 }
 
 
@@ -125,15 +128,22 @@ getBunicornsAndTrainers = async function (address){
     var bunicorns, trainers;
     await gameContract.methods.getMyBunicorns().call({from: address}).then(x => bunicorns = x)
     await gameContract.methods.getMyTrainers().call({from: address}).then(x => trainers = x)
-    var bunicornInfo = [], trainerInfo = [];
+    var bunicornInfo = {}, trainerInfo = {};
     for(let bunicorn of bunicorns){
-        await getBunicorn(bunicorn).then(x => bunicornInfo.push(x));
+        await getBunicorn(bunicorn).then(x => bunicornInfo[x.id] = x);
     }
     for(let trainer of trainers){
-        await getTrainer(trainer).then(x => trainerInfo.push(x));
+        await getTrainer(trainer).then(x => trainerInfo[x.id] = x);
     }
     return {
         trainers:trainerInfo,
         bunicorns:bunicornInfo
     }
+}
+
+var icons = {
+    AIR:"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABYAAAAXCAYAAAAP6L+eAAAB9ElEQVQ4jaXVS4iNYRgH8N/IysJd7rfcZkKRpJQosZUmISVZyMbGykrNxgKxmGLHDrkkFkoikY0ligwLagy5dRwNwzHpqefUcTqXT+dfb997/b/P87zP8/+6uj/3K4BxWItPeI7RdgfGFCBdhQHcxzO8xvpOiWP9EmbhNypYgFuY0QnxXCzL/l50YxgTsKsT4ncYzP6FJH6R49n5XYT+XD+CKTE5tg1xuL8D5zEJ37A41yLe8/EYk3NuNw5gUxDPxPIaspF0t4pf2IM5OInxGMI1nE7S8OIGDmIhTgXxE0xtY3ktvmNnfifmfMT8bqbjCWyNGL8tQBYevMflzOeHOX8Wf9LrYyhVvQ6L16WbwxlTWQClJpfU4h42YBuu4niu3Q7i7diXsa0UICs1qLzw/BxW5gP3BfFRrChAWARDGf+BIO7LlOqqO/gTP5qQfa0bh6cvcR3lmCgqQv+NsPgKetPick2cK9XbE1/wIB/oQ7uLwuLBFJmiCNIteNpqf1i8MdtItvrYlfPVe3AY87LKehrs/4f4VbZmWIozWbr7cTPLtjeFpyGK6HFYtxmrMa0mBGvaHWyF6SmVgUO4gyU5/tgJcTxUNUyR7/GLipBEjl/shDhKNyQzVCsIQ5OjH9X1ptXBdkIfCCGPDAixCaF6lJLZHPgLn8Z1L/OxFRYAAAAASUVORK5CYII=",
+    WATER:"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAZCAYAAAA4/K6pAAABgUlEQVQ4jZWVvytFYRjHP/egkJTc4UoGGcQov0LJKBMDg0gWXZONSSSRwSqEwT9gMpEySBaDKDYGJCYDV1x69Lx6O533Pce3Trf3+fE5z/s8T+em6g4+cagd2AdOgT7gOyoscGUDU0AF0At0uIJcgFJ9q9HgfwHDQJl1HgFKkgICLd+WXGU0KUDKbYywTwOFcQAJmIt6E1ALjMcBxoB6B0A0D5S7AGlg2ZMsygCLLsAKUBkDEGWBpjCgW8tPogJgU39/AfKsAamEALSCrAH0Aw2hgA9gOwYyI/kCGIpw7gGTwIsHUA10CaAt5MjrNHLAakwVrYGOxtYGcK5nAdx4AJkgNMq8LovRO7DkAeQk+dYyPAOPoaBLD+BBACeWIa07b6vZAzgWwI5lkPMuUKXnFmDBkXwhjyQcAYeWo1OvdQecedZ7Vr6TpoHysXiynEVAjaf0Ld2VvwncAz2hhrokY56w72x0pQ1bB14jssU/oMlfxuj6XyjWBkoz34DryIUCfgDe1D/KFvnDGwAAAABJRU5ErkJggg==",
+    FIRE:"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAAYCAYAAAD3Va0xAAABwUlEQVQ4jZXVS6hPURTH8c+fi6LI4JLcFBFJUUwkeQ7I6w64ZjJVQikTFDMpI2UqEklKHgMTA0UGKKEoRElCyTORrpb20bbb5/L/Tc4+6/E9a7/W6Qz292tRD7ZgALMwFitxtxbe0wKZiMtYkNnOtUFCwyq2TkrKIYPY3wZpA63D4sL2FI+7BQ0MldANaGbFNh2ruwV9aYk9gbndgG60xPbiJrb+L+h021cxGsdxFMPbQGsxDw9xfwhYaDvO5LAcFKVfQx8u/AMU2oRDNdAMjMdOPCuSPrXAdmNRDorTvCGNl2BckTAK5yugyNubg1ZhdhpPxvwiYWQCPa/AlseHGtCezDECtZbwHTsq9qi2L27/NCzNHL2V4NA9PMEDzCl8H6OiZYXxa2XXridI6FLh+4C3UdHUwrEt7VIzvR9pdxq9KOLPSo0tP6F3cBITUg/qpLNyO4sZk43f46C0a48yx8X0fINbqbLDRQUL0/MbNuJVA7qCz8n5M0s4kq5K4wtNwnq8xop0E34rQO+wK72vyZLi3Fwt+vo+nEq7Fp3gj/K/yOZ0qw/gWDGdUKxlVPSy4vvrrsXqT0kLGB2xVEy7CoFfNQpRSQhDp7YAAAAASUVORK5CYII=",
+    EARTH:"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAAWCAYAAAAmaHdCAAABT0lEQVQ4jZXUPUtdQRDG8Z+voBYG5GIEsYlVQIQ0WguClbUQtBcstLuFECHgB4iQLoJYiIIWCiKCVarUfgMbiwiJdr4UsrIXzl32nHt8mmWHOX9mnpmzXUcb0yo0gUOs409ZWncFoIErzOICU++FDOIMk/H+AecYrwvpwQFmkvh4BA3XgexgsaTC0NIJ+qsgX7BaAmhpDkvFQG+ScI0VDGAtMfMvvuEp+lVayTP20ZeZRiPGfuFfFSToa/Qlp9Dq9zSeQkK/u+gqgQRtpr4VIVnnS9Q2wSLkNLcDJWrt0qhkOnsYiwnLFRWFf+kej3hIIVvx/NmhpUZcg6dcO0HNmsvWZn4REka73QGQzW1BFmqMNlUzbvWbJ59xXHO0qX7gJkBGcJup4mN8V1p6CR9kQI0A+V14fIq6xHwhcIdPuXKqnsehDvdakLBQRf3PZuEVte4yI9YqoyMAAAAASUVORK5CYII="
 }
