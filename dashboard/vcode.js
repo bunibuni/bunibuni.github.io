@@ -216,4 +216,3 @@ var app = new Vue({
         })
     }
 }).$mount('#app')
-setInterval(app.callGetBalances, 1000 * 5)
