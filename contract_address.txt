@@ -6,5 +6,6 @@
    "burTokenContract":"0xc1619D98847CF93d857DFEd4e4d70CF4f984Bd56",
    "mysteryBox":"0x2B982Fb9dcCFcA940Fa8C7e93D8d2742f3A9C7bb",
    "trainerContract":"0xa40E375bBff05D982F9401311949c6970EA6e523",
-   "bunicornContract":"0x86B81f94646337879ddfEE8BCb89724f4ae721FE"
+   "bunicornContract":"0x86B81f94646337879ddfEE8BCb89724f4ae721FE",
+   "battleContact":"0x27505a3Dd0bEBd56cD150dD6c96b4a8Fe7A19904"
 }
